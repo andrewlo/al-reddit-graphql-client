@@ -5,11 +5,10 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Widget list</h1>
+        <h1>Subreddit list</h1>
         <ul>
-          {this.props.viewer.widgets.edges.map(edge =>
-            <li key={edge.node.id}>{edge.node.name} (ID: {edge.node.id})</li>
-          )}
+          { this.props.subreddit.hotListings.map((link, index) =>
+              <li key={ index }><a href={ link.url }>{ link.title }</a></li>) }
         </ul>
       </div>
     );
@@ -18,15 +17,11 @@ class App extends React.Component {
 
 export default Relay.createContainer(App, {
   fragments: {
-    viewer: () => Relay.QL`
-      fragment on User {
-        widgets(first: 10) {
-          edges {
-            node {
-              id,
-              name,
-            },
-          },
+    subreddit: () => Relay.QL`
+      fragment on RedditSubreddit {
+        hotListings(limit: 10) {
+          title,
+          url,
         },
       }
     `,

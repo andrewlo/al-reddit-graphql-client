@@ -2,9 +2,9 @@ import Relay from 'react-relay';
 
 export default class extends Relay.Route {
   static queries = {
-    viewer: () => Relay.QL`
+    subreddit: () => Relay.QL`
       query {
-        viewer
+        subreddit(name: "toronto")
       }
     `,
   };
