@@ -1,29 +1,44 @@
 import React from 'react';
 import Relay from 'react-relay';
+import SubredditRoute from '../routes/SubredditRoute';
+import Subreddit from './Subreddit';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentSubredditName: 'Toronto',
+      subredditInputValue: ''
+    };
+  }
+  handleInputChange = (event) => {
+    this.setState({subredditInputValue: event.target.value});
+  }
+  handleSubmit = (event) => {
+    this.setState({currentSubredditName: this.state.subredditInputValue});
+    event.preventDefault();
+  }
   render() {
+    const subredditName = this.state.currentSubredditName;
     return (
       <div>
-        <h1>Subreddit list</h1>
-        <ul>
-          { this.props.subreddit.hotListings.map((link, index) =>
-              <li key={ index }><a href={ link.url }>{ link.title }</a></li>) }
-        </ul>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Subreddit name:
+            <input type="text" value={this.state.subredditInputValue}
+              onChange={this.handleInputChange} />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+        <Relay.Renderer
+          environment={Relay.Store}
+          Container={Subreddit}
+          queryConfig={new SubredditRoute({subredditName})}
+          renderLoading={() => <div>Loading...</div>}
+        />
       </div>
     );
   }
 }
 
-export default Relay.createContainer(App, {
-  fragments: {
-    subreddit: () => Relay.QL`
-      fragment on RedditSubreddit {
-        hotListings(limit: 10) {
-          title,
-          url,
-        },
-      }
-    `,
-  },
-});
+export default App;
