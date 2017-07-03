@@ -21,13 +21,11 @@ class App extends React.Component {
   render() {
     const subredditName = this.state.currentSubredditName;
     return (
-      <div>
+      <div className="pa3">
         <form onSubmit={this.handleSubmit}>
-          <label>
-            Subreddit name:
-            <input type="text" value={this.state.subredditInputValue}
-              onChange={this.handleInputChange} />
-          </label>
+          <input type="text" value={this.state.subredditInputValue}
+            onChange={this.handleInputChange}
+            placeholder="Subreddit name" />
           <input type="submit" value="Submit" />
         </form>
         <Relay.Renderer
